@@ -1,0 +1,20 @@
+var ItemstoAdd = {
+    "items" : [
+        { 
+            "itemName": "Joola Carbon Blade",
+            "itemQuantity": 8 
+        },
+        {   "itemName": "Mark V Red Rubber",
+            "itemQuantity": 10 
+        },
+        {   "itemName": "Mark V Black Rubber", 
+            "itemQuantity":12
+        },
+        {   "itemName": "DHS 3 star Ball", 
+            "itemQuantity": 14
+        },
+        {   "itemName": "Stiga TT Table",
+            "itemQuantity": 16 
+        }
+]
+}
