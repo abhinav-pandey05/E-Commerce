@@ -1,20 +1,136 @@
-var ItemstoAdd = {
-    "items" : [
-        { 
+// var ItemstoAdd = {
+//     "items" : [
+//         { 
+//             "itemName": "Joola Carbon Blade",
+//             "itemQuantity": 8 
+//         },
+//         {   "itemName": "Mark V Red Rubber",
+//             "itemQuantity": 10 
+//         },
+//         {   "itemName": "Mark V Black Rubber", 
+//             "itemQuantity":12
+//         },
+//         {   "itemName": "DHS 3 star Ball", 
+//             "itemQuantity": 14
+//         },
+//         {   "itemName": "Stiga TT Table",
+//             "itemQuantity": 16 
+//         }
+// ]
+// }
+var cartInfoWrapper = document.getElementById("cartInfoWrapper");
+var buttons = document.querySelectorAll("input[type=button]");
+var itemQtys = document.querySelectorAll(".itemQty");
+
+var itemstoAdd = [        
+        {   
+            "itemID"  : 1,
             "itemName": "Joola Carbon Blade",
-            "itemQuantity": 8 
+            "itemQuantity": 4 
         },
-        {   "itemName": "Mark V Red Rubber",
-            "itemQuantity": 10 
+        {   
+            "itemID"  : 2,
+            "itemName": "Mark V Red Rubber",
+            "itemQuantity": 4 
         },
-        {   "itemName": "Mark V Black Rubber", 
-            "itemQuantity":12
+        {    
+            "itemID"  : 3,
+            "itemName": "Mark V Black Rubber", 
+            "itemQuantity":4
         },
-        {   "itemName": "DHS 3 star Ball", 
-            "itemQuantity": 14
+        {    
+            "itemID"  : 4,
+            "itemName": "DHS 3 star Ball", 
+            "itemQuantity": 4
         },
-        {   "itemName": "Stiga TT Table",
-            "itemQuantity": 16 
+        {    
+            "itemID"  : 5,
+            "itemName": "Stiga TT Table",
+            "itemQuantity": 4 
         }
 ]
-}
+
+var Execute = (function () {
+    return {
+
+        init:   function () {
+            Execute.updateQuantity();
+            for(let j=0 ; j < buttons.length ; j++) {
+                buttons[j].addEventListener("click", function() {
+                   Execute.fetchInventoryID(this);   
+                });
+            }
+        },
+        updateQuantity: function () {
+            var itemNames = document.querySelectorAll(".itemNameHeader");
+            for(let i=0;i<itemNames.length;i++) {
+                itemNames[i].innerHTML = itemstoAdd[i].itemName;
+                itemQtys[i].innerHTML = itemstoAdd[i].itemQuantity;
+            }
+        },
+        fetchInventoryID: function (buttonNumber) {
+            let spanID;
+            var parentEle = buttonNumber.parentElement; 
+            spanID = parentEle.getElementsByClassName("itemQty")[0].id;
+            Execute.createNodes(spanID,parentEle);
+        },
+        createNodes: function (spanID,parentEle) {
+            
+            if(document.body.contains(document.getElementById(spanID-1))){
+                console.log(itemstoAdd[spanID-1].itemQuantity ,"Quantity before updating");
+                itemstoAdd[spanID-1].itemQuantity -=1 ;
+                // newSpan.innerText +=1;
+                console.log(document.getElementById(spanID-1));
+                console.log(itemstoAdd[spanID-1].itemQuantity ,"Quantity after updating");
+                Execute.updateQuantity();
+            }
+            else{
+                console.log("this is a new item");
+                var newDiv = document.createElement("div");
+                var newInnerDiv = document.createElement("div");            
+                var newLabel = document.createElement("label");
+                var newSpan = document.createElement("span");
+                var newButton = document.createElement("button");
+
+                newDiv.className = "cartItemsInfo";
+                newInnerDiv.className = "cartInfo";
+                newButton.className = "removeButtons";
+                newButton.innerHTML = "Remove";
+                newButton.setAttribute("id",spanID-1);
+                
+                cartInfoWrapper.appendChild(newDiv);
+                newDiv.appendChild(newInnerDiv);
+                newInnerDiv.appendChild(newLabel);
+                newInnerDiv.appendChild(newSpan);
+                newDiv.appendChild(newButton);
+                // newSpan.id = "value";
+                newLabel.innerHTML = itemstoAdd[spanID-1].itemName;
+                newSpan.innerText = itemstoAdd[spanID-1].itemQuantity;
+                
+                newSpan.innerText = 1; 
+                newButton.addEventListener('click',Execute.handleRemove.bind(newButton));
+            }
+            // console.log(newButton);
+
+            if(itemstoAdd[spanID-1].itemQuantity < 1) {
+                parentEle.parentElement.style.display ="none";
+            }
+            // else{
+            //     itemstoAdd[spanID-1].itemQuantity -= 1;
+            //     Execute.updateQuantity();
+            // }
+        },
+        handleRemove: function(newButton){
+            var cartButtonsArray = cartInfoWrapper.getElementsByTagName("button");
+            console.log(cartButtonsArray);
+            var cartInfo = newButton.target.parentElement;
+                   var cartItemsInfo = cartInfo.parentElement;
+                   console.log("cartItemsInfo is" , cartItemsInfo);
+                   cartItemsInfo. parentNode. removeChild(cartItemsInfo);
+            
+        },
+        
+    }
+})();
+
+Execute.init();
